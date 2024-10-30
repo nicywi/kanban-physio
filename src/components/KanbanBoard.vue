@@ -84,21 +84,78 @@ function updateStatus(column: string) {
 </script>
 
 <style scoped>
+/* Container and Column Styling */
 .kanban-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  padding: 20px;
+  background-color: #FFECBE;
+  gap: 20px;
 }
+
+.kanban-title {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #371110;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Column Headers */
+.kanban-column h2 {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 20px;
+  color: #371110;
+  border-bottom: 2px solid #371110;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
 .kanban-column {
   width: 30%;
-  background-color: #f0f0f0;
-  padding: 10px;
-  border-radius: 5px;
+  background-color: #FFF9F3;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #371110;
 }
+
+/* Card Styling */
 .kanban-card {
-  background-color: white;
-  margin: 5px;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  background-color: #F2B7B4;
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.kanban-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  background-color: #88706F;
+}
+
+.kanban-card:hover h3{
+  color: #FFF9F3;
+}
+
+.kanban-card:hover p{
+  color: #FFF9F3;
+}
+
+.kanban-card h3 {
+  font-size: 18px;
+  color: #371110;
+  font-weight: 600;
+  margin: 0;
+}
+
+.kanban-card p {
+  font-size: 14px;
+  color: #371110;
+  margin-top: 5px;
 }
 </style>
