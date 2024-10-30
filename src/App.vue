@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import KanbanBoard from './components/KanbanBoard.vue';
 </script>
 
 <template>
@@ -18,11 +19,16 @@ import HelloWorld from './components/HelloWorld.vue'
 
       <v-btn color="primary">Hello Vuetify</v-btn>
 
+      <div id="app">
+    <KanbanBoard />
+  </div>
+
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
     </div>
+    
   </header>
 
   <RouterView />
