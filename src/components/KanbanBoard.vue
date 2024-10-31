@@ -1,61 +1,99 @@
 <template>
-  <div>
-    <h1>Kanban Board</h1>
-    <div class="kanban-container">
-      <div class="kanban-column">
-        <h2>To Do</h2>
-        <draggable
-          v-model="board.todo"
-          :group="{ name: 'tasks' }"
-          @end="updateStatus('todo')"
-        >
-          <template #item="{ element }">
-            <div class="kanban-card">
-              <h3>{{ element.title }}</h3>
-              <p>{{ element.description }}</p>
-            </div>
-          </template>
-        </draggable>
-      </div>
+  <v-container fluid>
+    <v-row>
+      <v-col>
+        <h1 class="kanban-title">Nikola's Kanban Board</h1>
+      </v-col>
+    </v-row>
+    
+    <v-row class="kanban-container" justify="start">
+      <!-- "To Do" Column -->
+      <v-col class="fixed-width-col" cols="12" md="auto">
+        <v-card class="kanban-column">
+          <v-card-title class="column-title">To Do</v-card-title>
+          <draggable
+            v-model="board.todo"
+            :group="{ name: 'tasks' }"
+            @end="updateStatus('todo')"
+          >
+            <template #item="{ element }">
+              <v-card class="kanban-card mb-2">
+                <v-card-title class="card-title">{{ element.title }}</v-card-title>
+                <v-card-text class="card-description">{{ element.description }}</v-card-text>
+              </v-card>
+            </template>
+          </draggable>
 
-      <div class="kanban-column">
-        <h2>In Progress</h2>
-        <draggable
-          v-model="board.inProgress"
-          :group="{ name: 'tasks' }"
-          @end="updateStatus('inProgress')"
-        >
-          <template #item="{ element }">
-            <div class="kanban-card">
-              <h3>{{ element.title }}</h3>
-              <p>{{ element.description }}</p>
-            </div>
-          </template>
-        </draggable>
-      </div>
+          <!-- Add Task Form -->
+          <v-row class="add-task-form mb-4">
+            <v-col cols="12">
+              <v-card-title class="card-title">Add new task:</v-card-title>
+              <v-text-field 
+                v-model="newTask.title" 
+                label="Task Title" 
+                outlined 
+                dense
+              ></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-textarea 
+                v-model="newTask.description" 
+                label="Task Description" 
+                outlined 
+                dense
+              ></v-textarea>
+            </v-col>
+            <v-col cols="12" class="text-center">
+              <v-btn class="add-task-button" @click="addTask">Add Task</v-btn>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
 
-      <div class="kanban-column">
-        <h2>Done</h2>
-        <draggable
-          v-model="board.done"
-          :group="{ name: 'tasks' }"
-          @end="updateStatus('done')"
-        >
-          <template #item="{ element }">
-            <div class="kanban-card">
-              <h3>{{ element.title }}</h3>
-              <p>{{ element.description }}</p>
-            </div>
-          </template>
-        </draggable>
-      </div>
-    </div>
-  </div>
+      <!-- "In Progress" Column -->
+      <v-col class="fixed-width-col" cols="12" md="auto">
+        <v-card class="kanban-column">
+          <v-card-title class="column-title">In Progress</v-card-title>
+          <draggable
+            v-model="board.inProgress"
+            :group="{ name: 'tasks' }"
+            @end="updateStatus('inProgress')"
+          >
+            <template #item="{ element }">
+              <v-card class="kanban-card mb-2">
+                <v-card-title class="card-title">{{ element.title }}</v-card-title>
+                <v-card-text class="card-description">{{ element.description }}</v-card-text>
+              </v-card>
+            </template>
+          </draggable>
+        </v-card>
+      </v-col>
+
+      <!-- "Done" Column -->
+      <v-col class="fixed-width-col" cols="12" md="auto">
+        <v-card class="kanban-column">
+          <v-card-title class="column-title">Done</v-card-title>
+          <draggable
+            v-model="board.done"
+            :group="{ name: 'tasks' }"
+            @end="updateStatus('done')"
+          >
+            <template #item="{ element }">
+              <v-card class="kanban-card mb-2">
+                <v-card-title class="card-title">{{ element.title }}</v-card-title>
+                <v-card-text class="card-description">{{ element.description }}</v-card-text>
+              </v-card>
+            </template>
+          </draggable>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup lang="ts">
 import { reactive } from 'vue';
-import draggable from 'vuedraggable'; // Import the draggable component
+import draggable from 'vuedraggable';
 
 // Define the type for a task
 interface Task {
@@ -76,45 +114,58 @@ const board = reactive({
   done: [] as Task[],
 });
 
+// Reactive object for new task inputs
+const newTask = reactive({
+  title: '',
+  description: '',
+});
+
+// Function to add a new task
+function addTask() {
+  if (newTask.title && newTask.description) {
+    board.todo.push({
+      id: Date.now(),
+      title: newTask.title,
+      description: newTask.description,
+    });
+    // Reset the input fields
+    newTask.title = '';
+    newTask.description = '';
+  } else {
+    alert('Please provide a title and description for the task.');
+  }
+}
+
 // Function to update the task status when dragging is complete
 function updateStatus(column: string) {
   console.log(`Tasks updated in the ${column} column`);
-  console.log(board); // Additional check to see the board state after an update
+  console.log(board);
 }
+
 </script>
 
 <style scoped>
-/* Container and Column Styling */
-.kanban-container {
-  display: flex;
-  justify-content: space-around;
-  padding: 20px;
-  background-color: #FFECBE;
-  gap: 20px;
-}
-
 .kanban-title {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   color: #371110;
-  text-align: center;
-  margin-bottom: 20px;
+  text-align: left;
+  padding-left: 20px;
+  padding-top: 20px;
   font-size: 24px;
   font-weight: bold;
 }
 
-/* Column Headers */
-.kanban-column h2 {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 20px;
-  color: #371110;
-  border-bottom: 2px solid #371110;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
-  text-align: center;
+.kanban-container {
+  gap: 20px;
+  padding: 20px;
+}
+
+.fixed-width-col {
+  max-width: 300px;
+  min-width: 300px;
 }
 
 .kanban-column {
-  width: 30%;
   background-color: #FFF9F3;
   padding: 15px;
   border-radius: 10px;
@@ -122,7 +173,12 @@ function updateStatus(column: string) {
   border: 1px solid #371110;
 }
 
-/* Card Styling */
+.column-title {
+  font-size: 20px;
+  color: #371110;
+  font-weight: 800;
+}
+
 .kanban-card {
   background-color: #F2B7B4;
   margin: 10px 0;
@@ -138,24 +194,27 @@ function updateStatus(column: string) {
   background-color: #88706F;
 }
 
-.kanban-card:hover h3{
-  color: #FFF9F3;
-}
-
-.kanban-card:hover p{
-  color: #FFF9F3;
-}
-
-.kanban-card h3 {
+.card-title  {
   font-size: 18px;
   color: #371110;
   font-weight: 600;
-  margin: 0;
 }
 
-.kanban-card p {
+.card-description {
   font-size: 14px;
   color: #371110;
   margin-top: 5px;
+}
+
+.kanban-card:hover .card-title,
+.kanban-card:hover .card-description {
+  color: #FFF9F3;
+}
+
+.add-task-button {
+  background-color: #371110;
+  color: #FFF9F3;
+  border-radius: 10px;
+  padding: 10px 20px;
 }
 </style>
