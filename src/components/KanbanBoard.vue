@@ -104,14 +104,14 @@ interface Task {
 
 // Reactive object to hold the board's status and tasks
 const board = reactive({
-  todo: [
+  todo: [] as Task[],
+  inProgress: [
     { id: 1, title: 'Task 1', description: 'Description of task 1' } as Task,
     { id: 2, title: 'Task 2', description: 'Description of task 2' } as Task,
   ],
-  inProgress: [
+  done: [
     { id: 3, title: 'Task 3', description: 'Description of task 3' } as Task,
   ],
-  done: [] as Task[],
 });
 
 // Reactive object for new task inputs
